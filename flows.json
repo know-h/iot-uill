@@ -1,1 +1,474 @@
-[]
+[
+    {
+        "id": "45320ecbc177ab4c",
+        "type": "tab",
+        "label": "플로우 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "acd16cad818645bb",
+        "type": "group",
+        "z": "45320ecbc177ab4c",
+        "name": "조도",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "79f032491fe1d47e"
+        ],
+        "x": 234,
+        "y": 59,
+        "w": 152,
+        "h": 82
+    },
+    {
+        "id": "891f42ac449155c9",
+        "type": "io7 out",
+        "z": "45320ecbc177ab4c",
+        "authentication": "885763679a376da5",
+        "name": "",
+        "deviceId": "lamp1",
+        "cmd": "",
+        "fmt": "json",
+        "qos": "0",
+        "retain": "false",
+        "x": 970,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "23ee74bae3860d0e",
+        "type": "io7 in",
+        "z": "45320ecbc177ab4c",
+        "name": "",
+        "deviceId": "button1",
+        "authentication": "885763679a376da5",
+        "evt": "status",
+        "fmt": "json",
+        "qos": "0",
+        "allDevices": false,
+        "allEvents": false,
+        "allFormats": false,
+        "x": 150,
+        "y": 260,
+        "wires": [
+            [
+                "a9076c2fec8a3869"
+            ]
+        ]
+    },
+    {
+        "id": "a9076c2fec8a3869",
+        "type": "function",
+        "z": "45320ecbc177ab4c",
+        "name": "push",
+        "func": "if (msg.payload.d.button !== 'pushed') {\n return;\n}\nmsg.payload = {\n d : {\n lamp : \"toggle\"\n }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 260,
+        "wires": [
+            [
+                "891f42ac449155c9"
+            ]
+        ]
+    },
+    {
+        "id": "a8b8e58e397271fc",
+        "type": "io7 in",
+        "z": "45320ecbc177ab4c",
+        "name": "",
+        "deviceId": "lamp1",
+        "authentication": "885763679a376da5",
+        "evt": "status",
+        "fmt": "json",
+        "qos": "0",
+        "allDevices": false,
+        "allEvents": false,
+        "allFormats": false,
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "79f2dec5115a39c6"
+            ]
+        ]
+    },
+    {
+        "id": "96887125c82e8c59",
+        "type": "ui-switch",
+        "z": "45320ecbc177ab4c",
+        "name": "",
+        "label": "switch",
+        "group": "3124a25c4f7f3055",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-spread",
+        "clickableArea": "switch",
+        "onvalue": "on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 490,
+        "y": 200,
+        "wires": [
+            [
+                "7e1dd8dd91bf0cbc"
+            ]
+        ]
+    },
+    {
+        "id": "7e1dd8dd91bf0cbc",
+        "type": "function",
+        "z": "45320ecbc177ab4c",
+        "name": "lamp out",
+        "func": "msg.payload = {\n d : {\n lamp : msg.payload\n }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 200,
+        "wires": [
+            [
+                "891f42ac449155c9"
+            ]
+        ]
+    },
+    {
+        "id": "79f2dec5115a39c6",
+        "type": "function",
+        "z": "45320ecbc177ab4c",
+        "name": "lamp in",
+        "func": "msg.payload = msg.payload.d.lamp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 200,
+        "wires": [
+            [
+                "96887125c82e8c59"
+            ]
+        ]
+    },
+    {
+        "id": "37c8f9135368f94e",
+        "type": "io7 in",
+        "z": "45320ecbc177ab4c",
+        "name": "",
+        "deviceId": "lux1",
+        "authentication": "885763679a376da5",
+        "evt": "status",
+        "fmt": "json",
+        "qos": "0",
+        "allDevices": false,
+        "allEvents": false,
+        "allFormats": false,
+        "x": 150,
+        "y": 140,
+        "wires": [
+            [
+                "683dbb8fbd49e0a0",
+                "79f032491fe1d47e"
+            ]
+        ]
+    },
+    {
+        "id": "683dbb8fbd49e0a0",
+        "type": "function",
+        "z": "45320ecbc177ab4c",
+        "name": "Lux",
+        "func": "let evt1 = { d: {} };\nif (msg.payload.d.lux > 800) {\n evt1.d.lamp = 'off';\n} else {\n evt1.d.lamp = 'on';\n}\nreturn {payload: evt1};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 140,
+        "wires": [
+            [
+                "8e15229e01ccefed"
+            ]
+        ]
+    },
+    {
+        "id": "8e15229e01ccefed",
+        "type": "gate",
+        "z": "45320ecbc177ab4c",
+        "name": "",
+        "controlTopic": "control",
+        "defaultState": "open",
+        "openCmd": "open",
+        "closeCmd": "close",
+        "toggleCmd": "toggle",
+        "defaultCmd": "default",
+        "statusCmd": "status",
+        "persist": false,
+        "storeName": "memory",
+        "x": 770,
+        "y": 140,
+        "wires": [
+            [
+                "891f42ac449155c9"
+            ]
+        ]
+    },
+    {
+        "id": "c0ef16934aca20ba",
+        "type": "ui-switch",
+        "z": "45320ecbc177ab4c",
+        "name": "Auto",
+        "label": "Auto",
+        "group": "3124a25c4f7f3055",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-spread",
+        "clickableArea": "switch",
+        "onvalue": "open",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "close",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 150,
+        "y": 80,
+        "wires": [
+            [
+                "4dc2c7bf19853369"
+            ]
+        ]
+    },
+    {
+        "id": "4dc2c7bf19853369",
+        "type": "function",
+        "z": "45320ecbc177ab4c",
+        "name": "Auto",
+        "func": "msg.topic = 'control';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 80,
+        "wires": [
+            [
+                "8e15229e01ccefed"
+            ]
+        ]
+    },
+    {
+        "id": "79f032491fe1d47e",
+        "type": "ui-gauge",
+        "z": "45320ecbc177ab4c",
+        "g": "acd16cad818645bb",
+        "name": "조도",
+        "group": "66f4045550fa4e70",
+        "order": 1,
+        "value": "payload.d.lux",
+        "valueType": "msg",
+        "width": 3,
+        "height": 3,
+        "gtype": "gauge-half",
+        "gstyle": "needle",
+        "title": "gauge",
+        "alwaysShowTitle": false,
+        "floatingTitlePosition": "top-left",
+        "units": "units",
+        "icon": "",
+        "prefix": "",
+        "suffix": "",
+        "segments": [
+            {
+                "from": "0",
+                "color": "#5cd65c",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "400",
+                "color": "#ffc800",
+                "text": "",
+                "textType": "label"
+            },
+            {
+                "from": "750",
+                "color": "#ea5353",
+                "text": "",
+                "textType": "label"
+            }
+        ],
+        "min": 0,
+        "max": "1200",
+        "sizeThickness": 16,
+        "sizeGap": 4,
+        "sizeKeyThickness": 8,
+        "styleRounded": true,
+        "styleGlow": false,
+        "className": "",
+        "x": 310,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "885763679a376da5",
+        "type": "io7-hub",
+        "name": "io7 App ID",
+        "host": "mqtt",
+        "useTLS": false,
+        "knownPort": true,
+        "port": "1883",
+        "tls": "",
+        "clientid": ""
+    },
+    {
+        "id": "3124a25c4f7f3055",
+        "type": "ui-group",
+        "name": "Group 1",
+        "page": "d53a4cb05a17c394",
+        "width": 6,
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": true,
+        "disabled": false,
+        "groupType": "default"
+    },
+    {
+        "id": "66f4045550fa4e70",
+        "type": "ui-group",
+        "name": "Group Name",
+        "page": "d53a4cb05a17c394",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "d53a4cb05a17c394",
+        "type": "ui-page",
+        "name": "Page 1",
+        "ui": "a13f7105b9308cd7",
+        "path": "/page1",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "6c998f6c15047c27",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "a13f7105b9308cd7",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": true
+    },
+    {
+        "id": "6c998f6c15047c27",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "7bf83710ac7ff893",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-io7": "0.1.8",
+            "@flowfuse/node-red-dashboard": "1.27.1",
+            "node-red-contrib-simple-gate": "0.5.2"
+        }
+    }
+]
